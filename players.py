@@ -37,9 +37,9 @@ class Player:
             else:
                 opponent = game.player1
 
-            self.sos += game.player_dict[opponent].wins
+            self.sos += game.players_dict[opponent].wins
             if game.winner == self.id:
-                self.sodos += game.player_dict[opponent].wins
+                self.sodos += game.players_dict[opponent].wins
 
     def opponents_list(self):
         opponents = []
