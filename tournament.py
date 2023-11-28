@@ -7,20 +7,27 @@ def players_sorted_by_scores(players):
     return sorted(players, key = lambda player: player.scores(), reverse=True)
 
 def player_opponents_list(player, score_groups):
-    # pick up a list of available opponents within the same win group
-    opponents_in_group = players_sorted_by_scores([p for p in score_groups[player.wins]
-        if p.id != player.id and p.id not in player.opponents_list()])
+    # get the whole players sorted group
+    players_in_group = players_sorted_by_scores([p for p in score_groups[player.wins]])
+    
+    # get different info about the group
+    players_in_group_number = len(players_in_group)
+    mediana = players_in_group_number // 2 + players_in_group_number % 2
+    player_index = players_in_group.index(player)
 
-    opponents_in_group_number = len(opponents_in_group)
-    if opponents_in_group_number > 1:
-        # divide the list by half and reorder it
-        opponent_list = opponents_in_group[opponents_in_group_number // 2:] + \
-                        opponents_in_group[opponents_in_group_number // 2-1::-1]
-    elif opponents_in_group_number:
-        opponent_list = opponents_in_group
-    else:
-        opponent_list = []
+    # for player from the second half reduce the mediana
+    if player_index >= mediana:
+        players_in_group_number -= player_index
+        mediana = players_in_group_number // 2 + players_in_group_number % 2
 
+    # get the second half of list below the player
+    # and the rest of the list in the reversed order
+    opponent_list = players_in_group[player_index + mediana:] + \
+                    players_in_group[player_index + mediana - 1::-1]
+    # remove alredy played opponent and the player itself from the list
+    opponent_list = [op for op in opponent_list
+        if op.id != player.id and op.id not in player.opponents_list()]
+        
     # Add users from other groups as well going down
     for group in range(player.wins - 1, min(score_groups) - 1, -1):
         opponent_list += players_sorted_by_scores([p for p in score_groups[group]
@@ -65,10 +72,15 @@ class Tournament:
             if player in assigned_players:
                 continue
 
-            # pick up the full list of available opponents
+            # pick up the full list of available opponents,
             player_opponents = player_opponents_list(player, self.players_win_groups)
-            # and leave only available for the current itteration
+            # leave only available for the current itteration
             player_opponents = [op for op in player_opponents if op in players_list]
+#            # and remove already assigned players
+#            player_opponents = [op for op in player_opponents if op not in assigned_players]
+#
+#            print('player', player.id, 'opponets')
+#            [print(op.id) for op in player_opponents]
 
             opponents_number = len(player_opponents)
             if not opponents_number:
