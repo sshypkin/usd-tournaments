@@ -128,4 +128,54 @@ class Tournament:
         self.players_dict[player_id].active = False
         self.players_list_normalizing()
 
+    def wall(self):
+        def position(player):
+            if player == self.no_player:
+                return str(0)
+            else:
+                return str(self.players_by_scores.index(player) + 1)
+
+        wall = []
+        for player in self.players_by_scores:
+            if player == self.no_player:
+                continue
+
+            line = []
+            line.append(position(player))
+            line.append(player.full_name)
+            line.append(players.rating_list[player.rating])
+
+            games = []
+            for round in self.rounds:
+                player_found = False
+
+                for game in round:
+                    if player.id not in (game.player1, game.player2):
+                        continue
+                    else:
+                        player_found = True
+
+                    if player.id == game.player1:
+                        opponent = self.players_dict[game.player2]
+                    else:
+                        opponent = self.players_dict[game.player1]
+
+                    if player.id == game.winner:
+                        result = '+'
+                    else:
+                        result = '-'
+
+                    games.append(position(opponent) + result)
+
+                if not player_found:
+                    games.append('--')
+
+            line.append(games)
+            line.append(player.wins)
+            line.append(player.sos)
+            line.append(player.sodos)
+
+            wall.append(line)
+
+        return wall
 
