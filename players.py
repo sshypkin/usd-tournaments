@@ -17,6 +17,7 @@ class Player:
         self.wins = 0
         self.sos = 0
         self.sodos = 0
+        self.active = True
 
     def scores(self):
         return (self.wins, self.sos, self.sodos, self.rating)
@@ -56,3 +57,28 @@ class Player:
 
     def __str__(self):
         return f"{self.full_name}, {self.country}, {rating_list[self.rating]}"
+
+
+class NoPlayer(Player):
+    def __init__(self):
+        self.first_name = ''
+        self.second_name = ''
+        self.full_name = "free"
+        self.country = ''
+        self.id = self.full_name
+        self.rating = 0
+        self.games = []
+        self.wins = 0
+        self.sos = 0
+        self.sodos = 0
+        self.active = False
+
+    def calculate_wins(self):
+        pass
+
+    def calculate_scores(self):
+        pass
+
+    def __str__(self):
+        return self.full_name
+

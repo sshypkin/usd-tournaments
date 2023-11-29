@@ -8,7 +8,7 @@ def players_sorted_by_scores(players):
 
 def player_opponents_list(player, score_groups):
     # get the whole players sorted group
-    players_in_group = players_sorted_by_scores([p for p in score_groups[player.wins]])
+    players_in_group = players_sorted_by_scores([p for p in score_groups[player.wins] if p.active])
     
     # get different info about the group
     players_in_group_number = len(players_in_group)
@@ -31,7 +31,7 @@ def player_opponents_list(player, score_groups):
     # Add users from other groups as well going down
     for group in range(player.wins - 1, min(score_groups) - 1, -1):
         opponent_list += players_sorted_by_scores([p for p in score_groups[group]
-            if p.id not in player.opponents_list()])
+            if p.id not in player.opponents_list() and p.active])
 
     return opponent_list
 
@@ -39,10 +39,16 @@ def player_opponents_list(player, score_groups):
 class Tournament:
     def __init__(self, name):
         self.name = name
+
         self.players_dict = {}
         game.Game.players_dict = self.players_dict
+
         self.players_by_scores = []
         self.players_win_groups = {}
+        
+        self.no_player = players.NoPlayer()
+        self.players_dict[self.no_player.id] = self.no_player
+
         self.rounds = []
 
     def add_player(self, first_name, last_name, country, rating):
@@ -66,21 +72,16 @@ class Tournament:
         defined_pairs = []
         assigned_players = []
         if not players_list:
-            players_list = self.players_by_scores
+            players_list = self.active_players()
 
         for player in players_list:
-            if player in assigned_players:
+            if player in assigned_players or not player.active:
                 continue
 
             # pick up the full list of available opponents,
             player_opponents = player_opponents_list(player, self.players_win_groups)
             # leave only available for the current itteration
             player_opponents = [op for op in player_opponents if op in players_list]
-#            # and remove already assigned players
-#            player_opponents = [op for op in player_opponents if op not in assigned_players]
-#
-#            print('player', player.id, 'opponets')
-#            [print(op.id) for op in player_opponents]
 
             opponents_number = len(player_opponents)
             if not opponents_number:
@@ -108,9 +109,23 @@ class Tournament:
             games.append(game.Game(player1.id, player2.id))
 
         self.rounds.append(games)
+    
+    def active_players(self):
+        return [p for p in self.players_by_scores if p.active]
 
+    def players_list_normalizing(self):
+        if len(self.active_players()) % 2:
+            if self.no_player.active:
+                self.no_player.active = False
+            else:
+                self.no_player.active = True
 
+    def activate_player(self, player_id):
+        self.players_dict[player_id].active = True
+        self.players_list_normalizing()
 
-
+    def disactivate_player(self, player_id):
+        self.players_dict[player_id].active = False
+        self.players_list_normalizing()
 
 
