@@ -37,8 +37,8 @@ def player_opponents_list(player, score_groups):
 
 
 class Tournament:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+        self.name = ''
 
         self.players_dict = {}
         game.Game.players_dict = self.players_dict
@@ -53,7 +53,13 @@ class Tournament:
 
     def add_player(self, first_name, last_name, country, rating):
         new_player = players.Player(first_name, last_name, country, rating)
-        self.players_dict[new_player.id] = new_player
+
+        if new_player.id in self.players_dict:
+            raise AttributeError(f"The player is already added: '{new_player}'")
+        else:
+            self.players_dict[new_player.id] = new_player
+        
+        self.calculate_scores()
 
     def calculate_scores(self):
         self.players_win_groups = {}
@@ -110,6 +116,7 @@ class Tournament:
 
         self.rounds.append(games)
     
+    @property
     def active_players(self):
         return [p for p in self.players_by_scores if p.active]
 
@@ -128,12 +135,14 @@ class Tournament:
         self.players_dict[player_id].active = False
         self.players_list_normalizing()
 
+    @property
     def wall(self):
         def position(player):
             if player == self.no_player:
                 return str(0)
             else:
-                return str(self.players_by_scores.index(player) + 1)
+                players = [p for p in self.players_by_scores if p != self.no_player]
+                return str(players.index(player) + 1)
 
         wall = []
         for player in self.players_by_scores:

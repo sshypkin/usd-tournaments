@@ -2,17 +2,28 @@ rating_list = ['15 kyu', '14 kyu', '13 kyu', '12 kyu', '11 kyu', '10 kyu', '9 ky
 
 class Player:
     def __init__(self, first_name, second_name, country, rating):
-        self.first_name = first_name
-        self.second_name = second_name
-        self.full_name = f"{second_name} {first_name}"
-        self.country = country
+        if first_name:
+            self.first_name = first_name
+        else:
+            raise ValueError(f"\nFirst name should not be empty: '{first_name}'")
+        
+        if second_name:
+            self.second_name = second_name
+        else:
+            raise ValueError(f"\nSecond name should not be empty: '{second_name}'")
+        
+        if country:
+            self.country = country
+        else:
+            raise ValueError(f"\nCountry should not be empty: '{country}'")
 
         if rating in rating_list:
             self.rating = rating_list.index(rating)
         else:
-            raise ValueError(f"Rating '{rating}' is not in the rating list: {rating_list}")
+            raise ValueError(f"\nRating '{rating}' is not in the rating list:\n{rating_list}")
 
         self.id = f"{second_name}{first_name}{country}{self.rating}"
+        self.full_name = f"{second_name} {first_name}"
         self.games = []
         self.wins = 0
         self.sos = 0
