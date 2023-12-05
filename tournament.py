@@ -139,10 +139,10 @@ class Tournament:
     def wall(self):
         def position(player):
             if player == self.no_player:
-                return str(0)
+                return 0
             else:
                 players = [p for p in self.players_by_scores if p != self.no_player]
-                return str(players.index(player) + 1)
+                return players.index(player) + 1
 
         wall = []
         for player in self.players_by_scores:
@@ -150,7 +150,7 @@ class Tournament:
                 continue
 
             line = []
-            line.append(position(player))
+            line.append(str(position(player)))
             line.append(player.full_name)
             line.append(players.rating_list[player.rating])
 
@@ -180,9 +180,9 @@ class Tournament:
                     games.append('--')
 
             line.append(games)
-            line.append(player.wins)
-            line.append(player.sos)
-            line.append(player.sodos)
+            line.append(str(player.wins))
+            line.append(str(player.sos))
+            line.append(str(player.sodos))
 
             wall.append(line)
 
