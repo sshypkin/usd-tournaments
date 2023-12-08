@@ -1,6 +1,9 @@
 import os
 #import player
 
+def wait_to_continue():
+    input("\nClick Enter to continue...")
+
 exit_block = """---
 0. Exit
 
@@ -19,7 +22,7 @@ goback_block = """---
 
 Your choice: """
 
-tour_menu = """=== Torunament ===
+tour_menu = """=== Tournament ===
 1. Print wall
 
 9. Settings
@@ -34,8 +37,11 @@ def tournament(tour):
             break
         elif action == '1':
             print_wall(tour)
+        elif action == '9':
+            tournament_settings(tour)
 
 def print_wall(tour):
+    os.system('clear')
     wall = tour.wall
 
     num = "№"
@@ -44,7 +50,6 @@ def print_wall(tour):
     name_len = len(name)
     rank = "Rank"
     rank_len = len(rank)
-#    result_len = 0
     points = "Points"
     points_len = len(points)
     sos = "SOS"
@@ -82,6 +87,10 @@ def print_wall(tour):
         rounds_line = ''
         rounds_line_num = ''
 
+    print(tour.date)
+    print(tour.name)
+    print("Round time:", tour.timer)
+
     print('-' * num_len, '-' * name_len, '-' * rank_len, rounds_line,
             '-' * points_len, '-' * sos_len, '-' * sodos_len)
     print(num.rjust(num_len), name.rjust(name_len), rank.rjust(rank_len), rounds_line_num,
@@ -91,11 +100,17 @@ def print_wall(tour):
 
     for line in wall:
         (w_num, w_name, w_rank, w_rounds, w_points, w_sos, w_sodod) = line
-        print(w_num.rjust(num_len), w_name.rjust(name_len), w_rank.rjust(rank_len),
+        print(w_num.rjust(num_len), w_name.ljust(name_len), w_rank.rjust(rank_len),
                 w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
 
-    input()
+    wait_to_continue()
 
+
+def tournament_settings(tour):
+    print("=== Tournament settings ===\n")
+    tour.name = input("  Tournament name: ")
+    tour.timer = input("  Round time: ")
+    tour.date = input("  Date(s): ")
 
 
 players_menu = """=== Players ===
@@ -126,10 +141,10 @@ def add_player(tour):
             break
         except ValueError as e:
             print('', e)
-            input("\nClick Enter to continue...")
+            wait_to_continue()
         except AttributeError as e:
             print('', e)
-            input("\nClick Enter to continue...")
+            wait_to_continue()
             break
 
 

@@ -39,6 +39,8 @@ def player_opponents_list(player, score_groups):
 class Tournament:
     def __init__(self):
         self.name = ''
+        self.timer = ''
+        self.date = ''
 
         self.players_dict = {}
         game.Game.players_dict = self.players_dict
