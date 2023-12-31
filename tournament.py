@@ -76,11 +76,11 @@ class Tournament:
         self.players_by_scores = players_sorted_by_scores(self.players_dict.values())
 
     def suggest_paring(self, players_list = []):
-        # This is a recursuve function
+        # This is a recursive function
         defined_pairs = []
         assigned_players = []
         if not players_list:
-            players_list = self.active_players()
+            players_list = self.active_players
 
         for player in players_list:
             if player in assigned_players or not player.active:
@@ -88,7 +88,7 @@ class Tournament:
 
             # pick up the full list of available opponents,
             player_opponents = player_opponents_list(player, self.players_win_groups)
-            # leave only available for the current itteration
+            # leave only available for the current iteration
             player_opponents = [op for op in player_opponents if op in players_list]
 
             opponents_number = len(player_opponents)
@@ -123,7 +123,7 @@ class Tournament:
         return [p for p in self.players_by_scores if p.active]
 
     def players_list_normalizing(self):
-        if len(self.active_players()) % 2:
+        if len(self.active_players) % 2:
             if self.no_player.active:
                 self.no_player.active = False
             else:
@@ -176,7 +176,7 @@ class Tournament:
                     else:
                         result = '-'
 
-                    games.append(position(opponent) + result)
+                    games.append(str(position(opponent)) + result)
 
                 if not player_found:
                     games.append('--')

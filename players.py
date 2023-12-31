@@ -87,8 +87,8 @@ class NoPlayer(Player):
     def calculate_wins(self):
         pass
 
-    def calculate_scores(self):
-        pass
+    # def calculate_scores(self):
+    #     pass
 
     def __str__(self):
         return self.full_name

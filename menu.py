@@ -83,6 +83,11 @@ def print_wall(tour):
         for r in range(1, rounds_num + 1):
             rounds_line_num = str(r).rjust(result_len) + ' '
         rounds_line_num = rounds_line_num[:-1]
+
+        round_numbers_line = ''
+        for i in range(1, rounds_num + 1):
+            round_numbers_line += str(i).rjust(result_len) + ' '
+        round_numbers_line = round_numbers_line[:-1]
     else:
         rounds_line = ''
         rounds_line_num = ''
@@ -93,14 +98,21 @@ def print_wall(tour):
 
     print('-' * num_len, '-' * name_len, '-' * rank_len, rounds_line,
             '-' * points_len, '-' * sos_len, '-' * sodos_len)
-    print(num.rjust(num_len), name.rjust(name_len), rank.rjust(rank_len), rounds_line_num,
+    print(num.rjust(num_len), name.ljust(name_len), rank.rjust(rank_len), round_numbers_line,
             points.rjust(points_len), sos.rjust(sos_len), sodos.rjust(sodos_len))
     print('-' * num_len, '-' * name_len, '-' * rank_len, rounds_line,
                         '-' * points_len, '-' * sos_len, '-' * sodos_len)
 
     for line in wall:
-        (w_num, w_name, w_rank, w_rounds, w_points, w_sos, w_sodod) = line
+        (w_num, w_name, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
+
+        rounds = ''
+        for round in w_rounds:
+            rounds += str(round).rjust(result_len) + ' '
+        rounds = rounds[:-1]
+
         print(w_num.rjust(num_len), w_name.ljust(name_len), w_rank.rjust(rank_len),
+              rounds.rjust(len(rounds_line)),
                 w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
 
     wait_to_continue()
