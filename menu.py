@@ -82,15 +82,15 @@ def print_wall(tour):
         rounds_line_num = ''
         for r in range(1, rounds_num + 1):
             rounds_line_num = str(r).rjust(result_len) + ' '
-        rounds_line_num = rounds_line_num[:-1]
+        # rounds_line_num = rounds_line_num[:-1]
 
         round_numbers_line = ''
         for i in range(1, rounds_num + 1):
-            round_numbers_line += str(i).rjust(result_len) + ' '
+            round_numbers_line += str(i).center(result_len) + ' '
         round_numbers_line = round_numbers_line[:-1]
     else:
         rounds_line = ''
-        rounds_line_num = ''
+        # rounds_line_num = ''
 
     print(tour.date)
     print(tour.name)
@@ -111,8 +111,7 @@ def print_wall(tour):
             rounds += str(round).rjust(result_len) + ' '
         rounds = rounds[:-1]
 
-        print(w_num.rjust(num_len), w_name.ljust(name_len), w_rank.rjust(rank_len),
-              rounds.rjust(len(rounds_line)),
+        print(w_num.rjust(num_len), w_name.ljust(name_len), w_rank.rjust(rank_len), rounds.rjust(len(rounds_line)),
                 w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
 
     wait_to_continue()
