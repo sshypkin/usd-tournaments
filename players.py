@@ -1,4 +1,6 @@
-rating_list = ['15 kyu', '14 kyu', '13 kyu', '12 kyu', '11 kyu', '10 kyu', '9 kyu', '8 kyu', '7 kyu', '6 kyu', '5 kyu', '4 kyu', '3 kyu', '2 kyu', '1 kyu', '1 dan', '2 dan', '3 dan', '4 dan', '5 dan', '6 dan']
+rating_list = ['15 kyu', '14 kyu', '13 kyu', '12 kyu', '11 kyu', '10 kyu', '9 kyu', '8 kyu', '7 kyu', '6 kyu', '5 kyu',
+               '4 kyu', '3 kyu', '2 kyu', '1 kyu', '1 dan', '2 dan', '3 dan', '4 dan', '5 dan', '6 dan']
+
 
 class Player:
     def __init__(self, first_name, second_name, country, rating):
@@ -31,7 +33,7 @@ class Player:
         self.active = True
 
     def scores(self):
-        return (self.wins, self.sos, self.sodos, self.rating)
+        return self.wins, self.sos, self.sodos, self.rating
 
     def calculate_wins(self):
         self.wins = 0
@@ -92,4 +94,3 @@ class NoPlayer(Player):
 
     def __str__(self):
         return self.full_name
-
