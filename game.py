@@ -3,7 +3,8 @@ class Game:
 
     def __init__(self, player1_id, player2_id):
         if player1_id not in self.players_dict.keys() and player2_id not in self.players_dict.keys():
-            raise ValueError(f"Players '{player1_id}' or '{player2_id}' are not in the players list: ", self.players_dict.keys())
+            raise ValueError(f"Players '{player1_id}' or '{player2_id}' are not in the players list: ",
+                             self.players_dict.keys())
 
         self.id = f"{player1_id}:{player2_id}"
         self.player1 = player1_id
@@ -19,10 +20,9 @@ class Game:
         else:
             self.winner = None
 
-
     def set_winner(self, player_id):
         if player_id not in (self.player1, self.player2):
-            raise ValueError(f"Player '{player}' is not assigned to that game ('{self.player1}', '{self.player2}')")
+            raise ValueError(f"Player '{player_id}' is not assigned to that game ('{self.player1}', '{self.player2}')")
         
         self.winner = player_id
         self.players_dict[player_id].calculate_wins()
