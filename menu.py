@@ -26,6 +26,7 @@ Your choice: """
 
 tour_menu = """=== Tournament ===
 1. Print wall
+2. Print result for FESA
 
 9. Settings
 """ + goback_block
@@ -40,6 +41,8 @@ def tournament(tour):
             break
         elif action == '1':
             print_wall(tour)
+        elif action == '2':
+            print_fesa(tour)
         elif action == '9':
             tournament_settings(tour)
 
@@ -94,7 +97,7 @@ def print_wall(tour: Tournament):
 
     print(tour.date)
     print(tour.name)
-    print("Round time:", tour.timer)
+    print("Time control:", tour.timer)
 
     print('-' * num_len, '-' * name_len, '-' * rank_len, rounds_line,
           '-' * points_len, '-' * sos_len, '-' * sodos_len)
@@ -115,6 +118,38 @@ def print_wall(tour: Tournament):
         print(w_num.rjust(num_len), player_full_name.ljust(name_len), w_rank.rjust(rank_len),
               rounds.rjust(len(rounds_line)),
               w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
+
+    wait_to_continue()
+
+
+def print_fesa(tour: Tournament):
+    os.system('clear')
+    wall = tour.wall
+
+    print(tour.date)
+    print(tour.name)
+    print("Time control:", tour.timer)
+
+    rounds_line = ''
+    for i in range(1, len(tour.rounds) + 1):
+        rounds_line += str(i) + ' '
+    rounds_line = rounds_line[:-1]
+    print('Nr Name Nat', rounds_line, 'Pts')
+
+    for line in wall:
+        (w_num, w_pid, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
+
+        rounds_line = ''
+        for current_round in w_rounds:
+            if current_round == '0+':
+                current_round = 'free'
+            elif current_round == '--':
+                current_round = '-'
+            rounds_line += current_round + ' '
+        rounds_line = rounds_line[:-1]
+
+        print(f"{w_num} [{tour.players_dict[w_pid].second_name}] [{tour.players_dict[w_pid].first_name}] {tour.players_dict[w_pid].country} [{rounds_line}] {w_points}")
+
 
     wait_to_continue()
 
