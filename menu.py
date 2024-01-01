@@ -5,6 +5,7 @@ import os
 def wait_to_continue():
     input("\nClick Enter to continue...")
 
+
 exit_block = """---
 0. Exit
 
@@ -16,7 +17,7 @@ main = """=== Main ===
 ---
 0. Exit
 
-Your choice: """ 
+Your choice: """
 
 goback_block = """---
 0. Go back
@@ -29,17 +30,19 @@ tour_menu = """=== Tournament ===
 9. Settings
 """ + goback_block
 
+
 def tournament(tour):
     while True:
         os.system('clear')
         action = input(tour_menu)
-        
+
         if action == '0':
             break
         elif action == '1':
             print_wall(tour)
         elif action == '9':
             tournament_settings(tour)
+
 
 def print_wall(tour: Tournament):
     os.system('clear')
@@ -77,46 +80,41 @@ def print_wall(tour: Tournament):
     result_len = num_len + 1
 
     rounds_num = len(tour.rounds)
+    round_numbers_line = ''
     if rounds_num:
         round_line = '-' * result_len + ' '
         rounds_line = round_line * rounds_num
         rounds_line = rounds_line[:-1]
 
-        rounds_line_num = ''
-        for r in range(1, rounds_num + 1):
-            rounds_line_num = str(r).rjust(result_len) + ' '
-        # rounds_line_num = rounds_line_num[:-1]
-
-        round_numbers_line = ''
         for i in range(1, rounds_num + 1):
             round_numbers_line += str(i).center(result_len) + ' '
         round_numbers_line = round_numbers_line[:-1]
     else:
         rounds_line = ''
-        # rounds_line_num = ''
 
     print(tour.date)
     print(tour.name)
     print("Round time:", tour.timer)
 
     print('-' * num_len, '-' * name_len, '-' * rank_len, rounds_line,
-            '-' * points_len, '-' * sos_len, '-' * sodos_len)
+          '-' * points_len, '-' * sos_len, '-' * sodos_len)
     print(num.rjust(num_len), name.ljust(name_len), rank.rjust(rank_len), round_numbers_line,
-            points.rjust(points_len), sos.rjust(sos_len), sodos.rjust(sodos_len))
+          points.rjust(points_len), sos.rjust(sos_len), sodos.rjust(sodos_len))
     print('-' * num_len, '-' * name_len, '-' * rank_len, rounds_line,
-                        '-' * points_len, '-' * sos_len, '-' * sodos_len)
+          '-' * points_len, '-' * sos_len, '-' * sodos_len)
 
     for line in wall:
         (w_num, w_pid, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
         player_full_name = tour.players_dict[w_pid].full_name
 
         rounds = ''
-        for round in w_rounds:
-            rounds += str(round).rjust(result_len) + ' '
+        for current_round in w_rounds:
+            rounds += str(current_round).rjust(result_len) + ' '
         rounds = rounds[:-1]
 
-        print(w_num.rjust(num_len), player_full_name.ljust(name_len), w_rank.rjust(rank_len), rounds.rjust(len(rounds_line)),
-                w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
+        print(w_num.rjust(num_len), player_full_name.ljust(name_len), w_rank.rjust(rank_len),
+              rounds.rjust(len(rounds_line)),
+              w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
 
     wait_to_continue()
 
@@ -132,6 +130,7 @@ players_menu = """=== Players ===
 1. Add a new player
 """ + goback_block
 
+
 def players(tour):
     while True:
         os.system('clear')
@@ -141,6 +140,7 @@ def players(tour):
             break
         elif action == '1':
             add_player(tour)
+
 
 def add_player(tour):
     while True:
@@ -161,5 +161,3 @@ def add_player(tour):
             print('', e)
             wait_to_continue()
             break
-
-
