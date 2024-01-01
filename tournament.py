@@ -133,7 +133,7 @@ class Tournament:
         self.players_dict[player_id].active = True
         self.players_list_normalizing()
 
-    def disactivate_player(self, player_id):
+    def deactivate_player(self, player_id):
         self.players_dict[player_id].active = False
         self.players_list_normalizing()
 
