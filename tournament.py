@@ -1,37 +1,40 @@
-import game, players
+import players
+import game
+
 
 def list_cleanup(original, subtract):
     return [i for i in original if i not in subtract]
 
-def players_sorted_by_scores(players):
-    return sorted(players, key = lambda player: player.scores(), reverse=True)
+
+def players_sorted_by_scores(player_list):
+    return sorted(player_list, key=lambda player: player.scores(), reverse=True)
+
 
 def player_opponents_list(player, score_groups):
     # get the whole players sorted group
     players_in_group = players_sorted_by_scores([p for p in score_groups[player.wins] if p.active])
-    
+
     # get different info about the group
     players_in_group_number = len(players_in_group)
-    mediana = players_in_group_number // 2 + players_in_group_number % 2
+    median = players_in_group_number // 2 + players_in_group_number % 2
     player_index = players_in_group.index(player)
 
-    # for player from the second half reduce the mediana
-    if player_index >= mediana:
+    # for player from the second half reduce the median
+    if player_index >= median:
         players_in_group_number -= player_index
-        mediana = players_in_group_number // 2 + players_in_group_number % 2
+        median = players_in_group_number // 2 + players_in_group_number % 2
 
     # get the second half of list below the player
     # and the rest of the list in the reversed order
-    opponent_list = players_in_group[player_index + mediana:] + \
-                    players_in_group[player_index + mediana - 1::-1]
-    # remove alredy played opponent and the player itself from the list
+    opponent_list = players_in_group[player_index + median:] + players_in_group[player_index + median - 1::-1]
+    # remove already played opponent and the player itself from the list
     opponent_list = [op for op in opponent_list
-        if op.id != player.id and op.id not in player.opponents_list()]
-        
+                     if op.id != player.id and op.id not in player.opponents_list()]
+
     # Add users from other groups as well going down
     for group in range(player.wins - 1, min(score_groups) - 1, -1):
         opponent_list += players_sorted_by_scores([p for p in score_groups[group]
-            if p.id not in player.opponents_list() and p.active])
+                                                   if p.id not in player.opponents_list() and p.active])
 
     return opponent_list
 
@@ -47,7 +50,7 @@ class Tournament:
 
         self.players_by_scores = []
         self.players_win_groups = {}
-        
+
         self.no_player = players.NoPlayer()
         self.players_dict[self.no_player.id] = self.no_player
 
@@ -60,7 +63,7 @@ class Tournament:
             raise AttributeError(f"The player is already added: '{new_player}'")
         else:
             self.players_dict[new_player.id] = new_player
-        
+
         self.calculate_scores()
 
     def calculate_scores(self):
@@ -75,7 +78,7 @@ class Tournament:
 
         self.players_by_scores = players_sorted_by_scores(self.players_dict.values())
 
-    def suggest_paring(self, players_list = []):
+    def suggest_paring(self, players_list=[]):
         # This is a recursive function
         defined_pairs = []
         assigned_players = []
@@ -94,7 +97,7 @@ class Tournament:
             opponents_number = len(player_opponents)
             if not opponents_number:
                 return None
-        
+
             elif opponents_number == 1:
                 defined_pairs.append((player, player_opponents[0]))
                 assigned_players.append(player)
@@ -117,7 +120,7 @@ class Tournament:
             games.append(game.Game(player1.id, player2.id))
 
         self.rounds.append(games)
-    
+
     @property
     def active_players(self):
         return [p for p in self.players_by_scores if p.active]
@@ -139,39 +142,39 @@ class Tournament:
 
     @property
     def wall(self):
-        def position(player):
-            if player == self.no_player:
+        def position(current_player):
+            if current_player == self.no_player:
                 return 0
             else:
-                players = [p for p in self.players_by_scores if p != self.no_player]
-                return players.index(player) + 1
+                player_list = [p for p in self.players_by_scores if p != self.no_player]
+                return player_list.index(current_player) + 1
 
         wall = []
         for player in self.players_by_scores:
             if player == self.no_player:
                 continue
 
-            line = []
-            line.append(str(position(player)))
-            line.append(player.id)
-            line.append(players.rating_list[player.rating])
+            line = [str(position(player)), player.id, players.rating_list[player.rating]]
+            # line.append(str(position(player)))
+            # line.append(player.id)
+            # line.append(players.rating_list[player.rating])
 
             games = []
-            for round in self.rounds:
+            for current_round in self.rounds:
                 player_found = False
 
-                for game in round:
-                    if player.id not in (game.player1, game.player2):
+                for current_game in current_round:
+                    if player.id not in (current_game.player1, current_game.player2):
                         continue
                     else:
                         player_found = True
 
-                    if player.id == game.player1:
-                        opponent = self.players_dict[game.player2]
+                    if player.id == current_game.player1:
+                        opponent = self.players_dict[current_game.player2]
                     else:
-                        opponent = self.players_dict[game.player1]
+                        opponent = self.players_dict[current_game.player1]
 
-                    if player.id == game.winner:
+                    if player.id == current_game.winner:
                         result = '+'
                     else:
                         result = '-'
@@ -189,4 +192,3 @@ class Tournament:
             wall.append(line)
 
         return wall
-
