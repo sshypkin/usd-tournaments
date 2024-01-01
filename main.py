@@ -1,4 +1,5 @@
-import tournament, menu
+import tournament
+import menu
 import os
 import pickle
 
@@ -36,10 +37,7 @@ while True:
     elif action == '2':
         menu.players(tour)
 
-
-
 data_file = f"tournament.dat"
 with open(data_file, 'wb') as file:
     pickle.dump(tour, file)
     print(f"Saved the tournament data to {data_file}")
-
