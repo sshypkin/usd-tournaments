@@ -148,8 +148,8 @@ def print_fesa(tour: Tournament):
             rounds_line += current_round + ' '
         rounds_line = rounds_line[:-1]
 
-        print(f"{w_num} [{tour.players_dict[w_pid].second_name}] [{tour.players_dict[w_pid].first_name}] {tour.players_dict[w_pid].country} [{rounds_line}] {w_points}")
-
+        print(f"{w_num} [{tour.players_dict[w_pid].second_name}] [{tour.players_dict[w_pid].first_name}] "
+              f"{tour.players_dict[w_pid].country} [{rounds_line}] {w_points}")
 
     wait_to_continue()
 
