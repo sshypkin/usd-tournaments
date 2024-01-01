@@ -1,5 +1,6 @@
+from tournament import Tournament
 import os
-#import player
+
 
 def wait_to_continue():
     input("\nClick Enter to continue...")
@@ -40,7 +41,7 @@ def tournament(tour):
         elif action == '9':
             tournament_settings(tour)
 
-def print_wall(tour):
+def print_wall(tour: Tournament):
     os.system('clear')
     wall = tour.wall
 
@@ -58,11 +59,13 @@ def print_wall(tour):
     sodos_len = len(sodos)
 
     for line in wall:
-        (w_num, w_name, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
+        (w_num, w_pid, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
+        player_full_name = tour.players_dict[w_pid].full_name
+
         if len(w_num) > num_len:
             num_len = len(w_num)
-        if len(w_name) > name_len:
-            name_len = len(w_name)
+        if len(player_full_name) > name_len:
+            name_len = len(player_full_name)
         if len(w_rank) > rank_len:
             rank_len = len(w_rank)
         if len(w_points) > points_len:
@@ -104,14 +107,15 @@ def print_wall(tour):
                         '-' * points_len, '-' * sos_len, '-' * sodos_len)
 
     for line in wall:
-        (w_num, w_name, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
+        (w_num, w_pid, w_rank, w_rounds, w_points, w_sos, w_sodos) = line
+        player_full_name = tour.players_dict[w_pid].full_name
 
         rounds = ''
         for round in w_rounds:
             rounds += str(round).rjust(result_len) + ' '
         rounds = rounds[:-1]
 
-        print(w_num.rjust(num_len), w_name.ljust(name_len), w_rank.rjust(rank_len), rounds.rjust(len(rounds_line)),
+        print(w_num.rjust(num_len), player_full_name.ljust(name_len), w_rank.rjust(rank_len), rounds.rjust(len(rounds_line)),
                 w_points.rjust(points_len), w_sos.rjust(sos_len), w_sodos.rjust(sodos_len))
 
     wait_to_continue()

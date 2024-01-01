@@ -153,7 +153,7 @@ class Tournament:
 
             line = []
             line.append(str(position(player)))
-            line.append(player.full_name)
+            line.append(player.id)
             line.append(players.rating_list[player.rating])
 
             games = []
