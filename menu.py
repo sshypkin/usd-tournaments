@@ -1,4 +1,5 @@
 from tournament import Tournament
+from round import Round
 import os
 
 
@@ -207,4 +208,16 @@ def rounds(tour: Tournament):
         if action == '0':
             break
         elif action == '1':
-            add_player(tour)
+            new_round(tour)
+
+
+def new_round(tour: Tournament):
+    # while True:
+    os.system('clear')
+    # tour.calculate_scores()
+    current_round = Round(tour.active_players, tour.players_win_groups)
+    # print(current_round.suggested_pairing)
+    for (p1, p2) in reversed(current_round.suggest_paring()):
+        print(f"{p1.id} vs {p2.id}")
+
+    wait_to_continue()

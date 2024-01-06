@@ -65,6 +65,7 @@ class Tournament:
             self.players_dict[new_player.id] = new_player
 
         self.calculate_scores()
+        self.players_list_normalizing()
 
     def calculate_scores(self):
         self.players_win_groups = {}
@@ -78,41 +79,47 @@ class Tournament:
 
         self.players_by_scores = players_sorted_by_scores(self.players_dict.values())
 
-    def suggest_paring(self, players_list=[]):
-        # This is a recursive function
-        defined_pairs = []
-        assigned_players = []
-        if not players_list:
-            players_list = self.active_players
-
-        for player in players_list:
-            if player in assigned_players or not player.active:
-                continue
-
-            # pick up the full list of available opponents,
-            player_opponents = player_opponents_list(player, self.players_win_groups)
-            # leave only available for the current iteration
-            player_opponents = [op for op in player_opponents if op in players_list]
-
-            opponents_number = len(player_opponents)
-            if not opponents_number:
-                return None
-
-            elif opponents_number == 1:
-                defined_pairs.append((player, player_opponents[0]))
-                assigned_players.append(player)
-                assigned_players.append(player_opponents[0])
-
-            else:
-                for opponent in player_opponents:
-                    pairs = self.suggest_paring(list_cleanup(players_list, (player, opponent)))
-                    if pairs:
-                        for pair in pairs:
-                            defined_pairs.append(pair)
-                        defined_pairs.append((player, opponent))
-                        return defined_pairs
-
-        return defined_pairs
+    # def suggest_paring(self, players_list=[]):
+    #     print("Launch suggest_paring()")
+    #     # This is a recursive function
+    #     defined_pairs = []
+    #     assigned_players = []
+    #     if not players_list:
+    #         players_list = self.active_players
+    #
+    #     for player in players_list:
+    #         print(f"Search pair for {player}")
+    #         if player in assigned_players or not player.active:
+    #             continue
+    #
+    #         # pick up the full list of available opponents,
+    #         player_opponents = player_opponents_list(player, self.players_win_groups)
+    #         # leave only available for the current iteration
+    #         player_opponents = [op for op in player_opponents if op in players_list]
+    #         print("Available opponents:", player_opponents)
+    #
+    #         opponents_number = len(player_opponents)
+    #         if not opponents_number:
+    #             print("No opponents found")
+    #             return None
+    #
+    #         elif opponents_number == 1:
+    #             defined_pairs.append((player, player_opponents[0]))
+    #             assigned_players.append(player)
+    #             assigned_players.append(player_opponents[0])
+    #             print("Defined pairs:", defined_pairs)
+    #
+    #         else:
+    #             for opponent in player_opponents:
+    #                 pairs = self.suggest_paring(list_cleanup(players_list, (player, opponent)))
+    #                 if pairs:
+    #                     for pair in pairs:
+    #                         defined_pairs.append(pair)
+    #                     defined_pairs.append((player, opponent))
+    #                     print("Defined pairs:", defined_pairs)
+    #                     return defined_pairs
+    #
+    #     return defined_pairs
 
     def add_round(self, suggested_pairs):
         games = []

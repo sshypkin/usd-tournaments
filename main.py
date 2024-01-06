@@ -43,3 +43,8 @@ data_file = f"tournament.dat"
 with open(data_file, 'wb') as file:
     pickle.dump(tour, file)
     print(f"Saved the tournament data to {data_file}")
+
+# for p in tour.active_players:
+#     print(p.id)
+# tour.calculate_scores()
+# print(tour.suggest_paring())
