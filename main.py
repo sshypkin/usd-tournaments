@@ -36,6 +36,8 @@ while True:
         menu.tournament(tour)
     elif action == '2':
         menu.players(tour)
+    elif action == '3':
+        menu.rounds(tour)
 
 data_file = f"tournament.dat"
 with open(data_file, 'wb') as file:

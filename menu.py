@@ -14,28 +14,24 @@ Your choice: """
 main = """=== Main ===
 1. Tournament
 2. Players
+3. Rounds
 ---
 0. Exit
 
 Your choice: """
 
-goback_block = """---
-0. Go back
-
-Your choice: """
-
-tour_menu = """=== Tournament ===
+tournament_menu = """=== Tournament ===
 1. Print wall
 2. Print result for FESA
 
 9. Settings
-""" + goback_block
+""" + exit_block
 
 
 def tournament(tour):
     while True:
         os.system('clear')
-        action = input(tour_menu)
+        action = input(tournament_menu)
 
         if action == '0':
             break
@@ -163,7 +159,7 @@ def tournament_settings(tour):
 
 players_menu = """=== Players ===
 1. Add a new player
-""" + goback_block
+""" + exit_block
 
 
 def players(tour):
@@ -196,3 +192,19 @@ def add_player(tour):
             print('', e)
             wait_to_continue()
             break
+
+
+rounds_menu = """=== Rounds ===
+1. Add a new round
+""" + exit_block
+
+
+def rounds(tour: Tournament):
+    while True:
+        os.system('clear')
+        action = input(rounds_menu)
+
+        if action == '0':
+            break
+        elif action == '1':
+            add_player(tour)
