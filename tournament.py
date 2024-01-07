@@ -55,17 +55,7 @@ class Tournament:
         self.players_dict[self.no_player.id] = self.no_player
 
         self.rounds = []
-
-    def add_player(self, first_name, last_name, country, rating):
-        new_player = players.Player(first_name, last_name, country, rating)
-
-        if new_player.id in self.players_dict:
-            raise AttributeError(f"The player is already added: '{new_player}'")
-        else:
-            self.players_dict[new_player.id] = new_player
-
-        self.calculate_scores()
-        self.players_list_normalizing()
+        self.rounds_tmp = []
 
     def calculate_scores(self):
         self.players_win_groups = {}
@@ -78,6 +68,24 @@ class Tournament:
             self.players_win_groups[player.wins].append(player)
 
         self.players_by_scores = players_sorted_by_scores(self.players_dict.values())
+
+    def players_list_normalizing(self):
+        if len(self.active_players) % 2:
+            if self.no_player.active:
+                self.no_player.active = False
+            else:
+                self.no_player.active = True
+
+    def add_player(self, first_name, last_name, country, rating):
+        new_player = players.Player(first_name, last_name, country, rating)
+
+        if new_player.id in self.players_dict:
+            raise AttributeError(f"The player is already added: '{new_player}'")
+        else:
+            self.players_dict[new_player.id] = new_player
+
+        self.calculate_scores()
+        self.players_list_normalizing()
 
     # def suggest_paring(self, players_list=[]):
     #     print("Launch suggest_paring()")
@@ -132,13 +140,6 @@ class Tournament:
     def active_players(self):
         return [p for p in self.players_by_scores if p.active]
 
-    def players_list_normalizing(self):
-        if len(self.active_players) % 2:
-            if self.no_player.active:
-                self.no_player.active = False
-            else:
-                self.no_player.active = True
-
     def activate_player(self, player_id):
         self.players_dict[player_id].active = True
         self.players_list_normalizing()
@@ -162,9 +163,6 @@ class Tournament:
                 continue
 
             line = [str(position(player)), player.id, players.rating_list[player.rating]]
-            # line.append(str(position(player)))
-            # line.append(player.id)
-            # line.append(players.rating_list[player.rating])
 
             games = []
             for current_round in self.rounds:

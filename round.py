@@ -50,10 +50,10 @@ class Round:
         self.available_players = self.players_list.copy()
         self.assigned_players = []
         self.win_groups = win_groups.copy()
-        self.suggested_pairing = self.suggest_paring()
+        self.suggested_pairing = list(reversed(self.suggest_pairing()))
         self.pairs = []
 
-    def suggest_paring(self, players_list=()) -> list[tuple[any, any]] | None:
+    def suggest_pairing(self, players_list=()) -> list[tuple[any, any]] | None:
         # This is a recursive function
         defined_pairs = []
         assigned_players = []
@@ -80,7 +80,7 @@ class Round:
 
             else:
                 for opponent in player_opponents:
-                    pairs = self.suggest_paring(list_cleanup(players_list, [player, opponent]))
+                    pairs = self.suggest_pairing(list_cleanup(players_list, [player, opponent]))
                     if pairs:
                         for pair in pairs:
                             defined_pairs.append(pair)

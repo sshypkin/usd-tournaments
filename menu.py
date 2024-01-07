@@ -196,11 +196,12 @@ def add_player(tour):
 
 
 rounds_menu = """=== Rounds ===
-1. Add a new round
+1. Show rounds
+2. Add a new round
 """ + exit_block
 
 
-def rounds(tour: Tournament):
+def rounds(tour: Tournament) -> None:
     while True:
         os.system('clear')
         action = input(rounds_menu)
@@ -208,16 +209,42 @@ def rounds(tour: Tournament):
         if action == '0':
             break
         elif action == '1':
+            show_rounds(tour)
+        elif action == '2':
             new_round(tour)
 
 
-def new_round(tour: Tournament):
-    # while True:
-    os.system('clear')
-    # tour.calculate_scores()
-    current_round = Round(tour.active_players, tour.players_win_groups)
-    # print(current_round.suggested_pairing)
-    for (p1, p2) in reversed(current_round.suggest_paring()):
-        print(f"{p1.id} vs {p2.id}")
+def show_rounds(tour: Tournament) -> None:
+    if tour.rounds_tmp:
+        os.system('clear')
+        round_num = 1
+        for round_item in tour.rounds_tmp:
+            print(f"Round {round_num}")
+            print("\tSuggested pairing")
+            print("\t" + "-" * 10)
+            for player1, player2 in round_item.suggested_pairing:
+                print(f"\t{player1.full_name} vs {player2.full_name}")
 
+            round_num += 1
+
+        wait_to_continue()
+
+    else:
+        while True:
+            os.system('clear')
+            print("No rounds found.")
+            answer = input("Would you like to add one? (y/n) ")
+            if answer == 'y':
+                new_round(tour)
+                break
+            elif answer == 'n':
+                break
+
+
+def new_round(tour: Tournament):
+    os.system('clear')
+    current_round = Round(tour.active_players, tour.players_win_groups)
+    tour.rounds_tmp.append(current_round)
+
+    print("New round successfully added.")
     wait_to_continue()
