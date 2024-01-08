@@ -149,7 +149,7 @@ class Tournament:
         self.players_list_normalizing()
 
     @property
-    def wall(self):
+    def wall(self) -> list:
         def position(current_player):
             if current_player == self.no_player:
                 return 0

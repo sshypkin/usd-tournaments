@@ -1,6 +1,6 @@
 from typing import List, Tuple, Any
 
-# from tournament import Tournament
+from tournament import Tournament
 from players import Player
 
 
@@ -45,11 +45,12 @@ def player_opponents_list(player: Player, score_groups: dict) -> list:
 
 
 class Round:
-    def __init__(self, active_players: list[list], win_groups: dict) -> None:
-        self.players_list = active_players.copy()
+    def __init__(self, tour: Tournament) -> None:
+        self.players_list = tour.active_players.copy()
         self.available_players = self.players_list.copy()
         self.assigned_players = []
-        self.win_groups = win_groups.copy()
+        self.win_groups = tour.players_win_groups.copy()
+        self.initial_wall = tour.wall
         self.suggested_pairing = list(reversed(self.suggest_pairing()))
         self.pairs = []
 
