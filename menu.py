@@ -305,20 +305,19 @@ def edit_pairs(current_round: Round) -> None:
         os.system('clear')
         print("Active players:")
         print('-' * 10)
-        # for i, player in enumerate(current_round.players_list):
-        #     if player.full_name == 'free':
-        #         continue
-        #     print(f"{i + 1}. {player}")
-        for line in current_round.initial_wall:
-            print(line)
+        for i, player in enumerate(current_round.players_list):
+            if player.full_name == 'free':
+                continue
+            print(f"{i + 1}. {player}, {player.wins} wins")
 
         print("\nSuggested pairs:")
         print('-' * 10)
         for player1, player2 in current_round.suggested_pairing:
             if player2.full_name == 'free':
-                print(f"{player1} is free")
+                print(f"{player1} ({current_round.players_list.index(player1) + 1}) is free")
                 continue
-            print(f"{player1} -> X <- {player2}")
+            print(f"{player1} ({current_round.players_list.index(player1) + 1}) -> X "
+                  f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
 
 
         wait_to_continue()

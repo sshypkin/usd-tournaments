@@ -50,7 +50,6 @@ class Round:
         self.available_players = self.players_list.copy()
         self.assigned_players = []
         self.win_groups = tour.players_win_groups.copy()
-        self.initial_wall = tour.wall
         self.suggested_pairing = list(reversed(self.suggest_pairing()))
         self.pairs = []
 
