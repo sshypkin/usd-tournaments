@@ -300,6 +300,14 @@ def edit_round(tour: Tournament) -> None:
         # break
 
 
+edit_pairs_menu = """
+1. Use suggested pairing
+2. Add a pair
+3. Remove a pair
+4. Clear pairs 
+""" + exit_block
+
+
 def edit_pairs(current_round: Round) -> None:
     while True:
         os.system('clear')
@@ -319,7 +327,30 @@ def edit_pairs(current_round: Round) -> None:
             print(f"{player1} ({current_round.players_list.index(player1) + 1}) -> X "
                   f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
 
+        print("\nCurrent pairs:")
+        print('-' * 10)
+        if not current_round.pairs:
+            print("None")
+        else:
+            for i, (player1, player2) in enumerate(current_round.pairs):
+                if player2.full_name == 'free':
+                    print(f"pair {i + 1}: {player1} ({current_round.players_list.index(player1) + 1}) is free")
+                    continue
+                print(f"pair {i + 1}: {player1} ({current_round.players_list.index(player1) + 1}) -> X "
+                      f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
 
+        action = input(edit_pairs_menu)
+        if action == '0':
+            break
+        elif action == '1':
+            current_round.add_pairs(current_round.suggested_pairing)
+        elif action == '2':
+            pass
+        elif action == '3':
+            pass
+        elif action == '4':
+            current_round.clear_pairs()
+
+        print("\nDone!")
         wait_to_continue()
         break
-    print('asd')

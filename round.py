@@ -47,10 +47,10 @@ def player_opponents_list(player: Player, score_groups: dict) -> list:
 class Round:
     def __init__(self, tour: Tournament) -> None:
         self.players_list = tour.active_players.copy()
-        self.available_players = self.players_list.copy()
-        self.assigned_players = []
+        self.available_players = set(self.players_list)
+        self.assigned_players = set()
         self.win_groups = tour.players_win_groups.copy()
-        self.suggested_pairing = list(reversed(self.suggest_pairing()))
+        self.suggested_pairing = tuple(reversed(self.suggest_pairing()))
         self.pairs = []
 
     def suggest_pairing(self, players_list=()) -> list[tuple[any, any]] | None:
@@ -88,3 +88,24 @@ class Round:
                         return defined_pairs
 
         return defined_pairs
+
+    def add_pairs(self, pairs: list[tuple[Player, Player]]) -> None:
+        for pair in pairs:
+            self.assigned_players.add(pair[0])
+            self.assigned_players.add(pair[1])
+            self.available_players.remove(pair[0])
+            self.available_players.remove(pair[1])
+            self.pairs.append(pair)
+
+    def remove_pairs(self, pairs: list[tuple[Player, Player]]) -> None:
+        for pair in pairs:
+            self.assigned_players.remove(pair[0])
+            self.assigned_players.remove(pair[1])
+            self.available_players.add(pair[0])
+            self.available_players.add(pair[1])
+            self.pairs.remove(pair)
+
+    def clear_pairs(self) -> None:
+        self.pairs.clear()
+        self.assigned_players.clear()
+        self.available_players = set(self.players_list)
