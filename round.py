@@ -49,17 +49,25 @@ class Round:
         self.players_list = tour.active_players.copy()
         self.win_groups = tour.players_win_groups.copy()
 
-        self.available_players = set(self.players_list)
+        # self.available_players = set(self.players_list)
         self.assigned_players = set()
-        self.suggested_pairing = tuple(reversed(self.suggest_pairing()))
+        # self.suggested_pairing = tuple(reversed(self.suggest_pairing()))
         self.pairs = []
+
+    @property
+    def available_players(self) -> list[Player]:
+        return list_cleanup(self.players_list, list(self.assigned_players))
 
     def suggest_pairing(self, players_list=()) -> list[tuple[any, any]] | None:
         # This is a recursive function
         defined_pairs = []
         assigned_players = []
         if not players_list:
-            players_list = self.players_list
+            players_list = self.available_players
+            # if self.assigned_players:
+            #     players_list = self.available_players
+            # else:
+            #     players_list = self.players_list
 
         for player in players_list:
             if player in assigned_players or not player.active:
@@ -94,19 +102,19 @@ class Round:
         for pair in pairs:
             self.assigned_players.add(pair[0])
             self.assigned_players.add(pair[1])
-            self.available_players.remove(pair[0])
-            self.available_players.remove(pair[1])
+            # self.available_players.remove(pair[0])
+            # self.available_players.remove(pair[1])
             self.pairs.append(pair)
 
     def remove_pairs(self, pairs: list[tuple[Player, Player]]) -> None:
         for pair in pairs:
             self.assigned_players.remove(pair[0])
             self.assigned_players.remove(pair[1])
-            self.available_players.add(pair[0])
-            self.available_players.add(pair[1])
+            # self.available_players.add(pair[0])
+            # self.available_players.add(pair[1])
             self.pairs.remove(pair)
 
     def clear_pairs(self) -> None:
         self.pairs.clear()
         self.assigned_players.clear()
-        self.available_players = set(self.players_list)
+        # self.available_players = set(self.players_list)
