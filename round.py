@@ -47,9 +47,10 @@ def player_opponents_list(player: Player, score_groups: dict) -> list:
 class Round:
     def __init__(self, tour: Tournament) -> None:
         self.players_list = tour.active_players.copy()
+        self.win_groups = tour.players_win_groups.copy()
+
         self.available_players = set(self.players_list)
         self.assigned_players = set()
-        self.win_groups = tour.players_win_groups.copy()
         self.suggested_pairing = tuple(reversed(self.suggest_pairing()))
         self.pairs = []
 

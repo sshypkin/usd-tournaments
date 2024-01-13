@@ -301,10 +301,14 @@ def edit_round(tour: Tournament) -> None:
 
 
 edit_pairs_menu = """
-1. Use suggested pairing
-2. Add a pair
-3. Remove a pair
-4. Clear pairs 
+Choose an action:
+---
+1. View suggested pairing
+2. Use suggested pairing
+3. View current pairs
+4. Add a pair
+5. Remove a pair
+6. Remove all pairs 
 """ + exit_block
 
 
@@ -317,40 +321,53 @@ def edit_pairs(current_round: Round) -> None:
             if player.full_name == 'free':
                 continue
             print(f"{i + 1}. {player}, {player.wins} wins")
-
-        print("\nSuggested pairs:")
         print('-' * 10)
-        for player1, player2 in current_round.suggested_pairing:
-            if player2.full_name == 'free':
-                print(f"{player1} ({current_round.players_list.index(player1) + 1}) is free")
-                continue
-            print(f"{player1} ({current_round.players_list.index(player1) + 1}) -> X "
-                  f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
-
-        print("\nCurrent pairs:")
-        print('-' * 10)
-        if not current_round.pairs:
-            print("None")
-        else:
-            for i, (player1, player2) in enumerate(current_round.pairs):
-                if player2.full_name == 'free':
-                    print(f"pair {i + 1}: {player1} ({current_round.players_list.index(player1) + 1}) is free")
-                    continue
-                print(f"pair {i + 1}: {player1} ({current_round.players_list.index(player1) + 1}) -> X "
-                      f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
 
         action = input(edit_pairs_menu)
         if action == '0':
             break
+
         elif action == '1':
-            current_round.add_pairs(current_round.suggested_pairing)
+            # View suggested pairing
+
+            print("\nSuggested pairs:")
+            print('-' * 10)
+            for player1, player2 in current_round.suggested_pairing:
+                if player2.full_name == 'free':
+                    print(f"{player1} ({current_round.players_list.index(player1) + 1}) is free")
+                    continue
+                print(f"{player1} ({current_round.players_list.index(player1) + 1}) -> X "
+                      f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
+
         elif action == '2':
+            # Use suggested pairing
+            # current_round.add_pairs(current_round.suggested_pairing)
             pass
+
         elif action == '3':
-            pass
+            # View current pairs
+            print("\nCurrent pairs:")
+            print('-' * 10)
+            if current_round.pairs:
+                for n, (player1, player2) in enumerate(current_round.pairs):
+                    if player2.full_name == 'free':
+                        print(f"pair {n + 1}: {player1} ({current_round.players_list.index(player1) + 1}) is free")
+                        continue
+                    print(f"pair {n + 1}: {player1} ({current_round.players_list.index(player1) + 1}) -> X "
+                          f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
+            else:
+                print("None")
+            print('-' * 10)
+
         elif action == '4':
+            pass
+
+        elif action == '5':
+            pass
+
+        elif action == '6':
             current_round.clear_pairs()
 
-        print("\nDone!")
+        # print("\nDone!")
         wait_to_continue()
-        break
+        # break
