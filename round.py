@@ -98,6 +98,12 @@ class Round:
 
         return defined_pairs
 
+    def add_pair(self, player1: Player, player2: Player) -> None:
+        # TODO: add checks
+        self.pairs.append((player1, player2))
+        self.assigned_players.add(player1)
+        self.assigned_players.add(player2)
+
     def add_pairs(self, pairs: list[tuple[Player, Player]]) -> None:
         for pair in pairs:
             self.assigned_players.add(pair[0])

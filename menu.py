@@ -314,7 +314,7 @@ Choose an action:
 
 def print_round_available_players(current_round: Round) -> None:
     length = 10
-    print("Active players:")
+    print("Available players:")
     print('-' * length)
     for n, player in enumerate(current_round.available_players):
         if player.full_name == 'free':
@@ -371,7 +371,16 @@ def edit_pairs(current_round: Round) -> None:
 
         elif action == '4':
             # Add a pair
-            pass
+            # pass
+            print_round_available_players(current_round)
+            print_round_suggested_pairs(current_round)
+            print()
+            print("Set a pair")
+            player1_pos = input("1st player's position: ")
+            player2_pos = input("2nd player's position: ")
+            player1 = current_round.available_players[int(player1_pos) - 1]
+            player2 = current_round.available_players[int(player2_pos) - 1]
+            current_round.add_pair(player1, player2)
 
         elif action == '5':
             # Remove a pair
