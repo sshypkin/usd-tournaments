@@ -274,7 +274,7 @@ def edit_round(tour: Tournament) -> None:
     while True:
         os.system('clear')
         print("Available rounds:", rounds_list)
-        round_num = input("Choose a round: ")
+        round_num = input("\nChoose a round: ")
         if not round_num.isnumeric():
             continue
         round_num = int(round_num)
@@ -291,13 +291,6 @@ def edit_round(tour: Tournament) -> None:
             break
         elif action == '1':
             edit_pairs(current_round)
-        # elif action == '2':
-        #     new_round(tour)
-        # elif action == '3':
-        #     edit_round(tour)
-
-        # wait_to_continue()
-        # break
 
 
 edit_pairs_menu = """
@@ -345,11 +338,11 @@ def print_round_pairs(current_round: Round, pair_type: str) -> None:
     print(f"\n{pair_type} pairs:")
     print('-' * length)
     if pairs:
-        for player1, player2 in pairs:
+        for n, (player1, player2) in enumerate(pairs):
             if player2.full_name == 'free':
-                print(f"{player1} ({players_list.index(player1) + 1}) is free")
+                print(f"pair {n + 1}: {player1} ({players_list.index(player1) + 1}) is free")
                 continue
-            print(f"{player1} ({players_list.index(player1) + 1}) -> X "
+            print(f"pair {n + 1}: {player1} ({players_list.index(player1) + 1}) -> X "
                   f"<- ({players_list.index(player2) + 1}) {player2}")
     else:
         print(None)
@@ -368,23 +361,21 @@ def edit_pairs(current_round: Round) -> None:
         elif action == '1':
             # View suggested pairing
             print_round_players(current_round, 'Available')
-            # print()
             print_round_pairs(current_round, 'Suggested')
 
         elif action == '2':
             # Use suggested pairing
-            pass
+            current_round.add_suggested_pairs()
+            print("Done")
 
         elif action == '3':
             # View current pairs
             print_round_players(current_round, 'Active')
-            # print()
             print_round_pairs(current_round, 'Current')
 
         elif action == '4':
             # Add a pair
             print_round_players(current_round, 'Available')
-            # print()
             print_round_pairs(current_round, 'Suggested')
             print()
             print("Set a pair")
@@ -393,15 +384,19 @@ def edit_pairs(current_round: Round) -> None:
             player1 = current_round.available_players[int(player1_pos) - 1]
             player2 = current_round.available_players[int(player2_pos) - 1]
             current_round.add_pair(player1, player2)
+            print("Done")
 
         elif action == '5':
             # Remove a pair
-            pass
+            print_round_pairs(current_round, 'Current')
+            print()
+            pair_num = input("Remove pair number: ")
+            current_round.remove_pair(int(pair_num) - 1)
+            print("Done")
 
         elif action == '6':
             # Remove all pairs
             current_round.clear_pairs()
+            print("Done")
 
-        # print("\nDone!")
         wait_to_continue()
-        # break
