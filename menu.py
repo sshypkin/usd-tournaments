@@ -312,34 +312,54 @@ Choose an action:
 """ + exit_block
 
 
-def print_round_available_players(current_round: Round) -> None:
+def print_round_players(current_round: Round, list_type: str) -> None:
     length = 10
-    print("Available players:")
+    player_list = []
+
+    if list_type == 'Available':
+        player_list = current_round.available_players
+    elif list_type == 'Active':
+        player_list = current_round.players_list
+
+    print(f"\n{list_type} players:")
     print('-' * length)
-    for n, player in enumerate(current_round.available_players):
+    for n, player in enumerate(player_list):
         if player.full_name == 'free':
             continue
         print(f"{n + 1}. {player}, {player.wins} wins")
     print('-' * length)
 
 
-def print_round_suggested_pairs(current_round: Round) -> None:
+def print_round_pairs(current_round: Round, pair_type: str) -> None:
     length = 10
-    print("\nSuggested pairs:")
+    pairs = list()
+    players_list = list()
+
+    if pair_type == 'Suggested':
+        pairs = reversed(current_round.suggest_pairing())
+        players_list = current_round.available_players
+    elif pair_type == 'Current':
+        pairs = current_round.pairs
+        players_list = current_round.players_list
+
+    print(f"\n{pair_type} pairs:")
     print('-' * length)
-    for player1, player2 in reversed(current_round.suggest_pairing()):
-        if player2.full_name == 'free':
-            print(f"{player1} ({current_round.players_list.index(player1) + 1}) is free")
-            continue
-        print(f"{player1} ({current_round.players_list.index(player1) + 1}) -> X "
-              f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
+    if pairs:
+        for player1, player2 in pairs:
+            if player2.full_name == 'free':
+                print(f"{player1} ({players_list.index(player1) + 1}) is free")
+                continue
+            print(f"{player1} ({players_list.index(player1) + 1}) -> X "
+                  f"<- ({players_list.index(player2) + 1}) {player2}")
+    else:
+        print(None)
     print('-' * length)
 
 
 def edit_pairs(current_round: Round) -> None:
     while True:
         os.system('clear')
-        print_round_available_players(current_round)
+        # print_round_players(current_round, 'Active')
 
         action = input(edit_pairs_menu)
         if action == '0':
@@ -347,33 +367,25 @@ def edit_pairs(current_round: Round) -> None:
 
         elif action == '1':
             # View suggested pairing
-            print_round_suggested_pairs(current_round)
+            print_round_players(current_round, 'Available')
+            # print()
+            print_round_pairs(current_round, 'Suggested')
 
         elif action == '2':
             # Use suggested pairing
-            # current_round.add_pairs(current_round.suggested_pairing)
             pass
 
         elif action == '3':
             # View current pairs
-            print("\nCurrent pairs:")
-            print('-' * 10)
-            if current_round.pairs:
-                for n, (player1, player2) in enumerate(current_round.pairs):
-                    if player2.full_name == 'free':
-                        print(f"pair {n + 1}: {player1} ({current_round.players_list.index(player1) + 1}) is free")
-                        continue
-                    print(f"pair {n + 1}: {player1} ({current_round.players_list.index(player1) + 1}) -> X "
-                          f"<- ({current_round.players_list.index(player2) + 1}) {player2}")
-            else:
-                print("None")
-            print('-' * 10)
+            print_round_players(current_round, 'Active')
+            # print()
+            print_round_pairs(current_round, 'Current')
 
         elif action == '4':
             # Add a pair
-            # pass
-            print_round_available_players(current_round)
-            print_round_suggested_pairs(current_round)
+            print_round_players(current_round, 'Available')
+            # print()
+            print_round_pairs(current_round, 'Suggested')
             print()
             print("Set a pair")
             player1_pos = input("1st player's position: ")
